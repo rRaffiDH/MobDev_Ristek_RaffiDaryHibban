@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:movie_app/pages/home.dart';
+import 'package:movie_app/pages/main_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData.dark().copyWith(
         scaffoldBackgroundColor: const Color(0xFF131010),
       ),
-      home: const Home(),
+      home: const MainScreen(),
     );
   }
 }
