@@ -1,10 +1,9 @@
-
 import 'dart:convert';
 import 'package:hive/hive.dart';
 
 part 'movie.g.dart'; 
 
-
+// Kelas Movie hanya digunakan untuk parsing data API (tidak disimpan di Hive)
 class Movie {
   int page;
   List<Result> results;
@@ -33,8 +32,8 @@ class Movie {
       };
 }
 
-
-@HiveType(typeId: 1) 
+/// Kelas Result digunakan untuk data film dari API dan disimpan di Hive
+@HiveType(typeId: 34) 
 class Result {
   @HiveField(0)
   bool adult;
@@ -130,7 +129,6 @@ class Result {
         "vote_count": voteCount,
       };
 }
-
 
 Movie movieFromJson(String str) => Movie.fromJson(json.decode(str));
 String movieToJson(Movie data) => json.encode(data.toJson());

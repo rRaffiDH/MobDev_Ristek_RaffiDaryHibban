@@ -8,7 +8,7 @@ part of 'movie.dart';
 
 class ResultAdapter extends TypeAdapter<Result> {
   @override
-  final int typeId = 1;
+  final int typeId = 34;
 
   @override
   Result read(BinaryReader reader) {
