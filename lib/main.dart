@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:movie_app/pages/home.dart';
-import 'package:movie_app/colors.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,7 +14,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',  
       theme: ThemeData.dark().copyWith(
-        scaffoldBackgroundColor: Colours.scaffoldBgColor,
+        scaffoldBackgroundColor: const Color(0xFF131010),
       ),
       home: const Home(),
     );

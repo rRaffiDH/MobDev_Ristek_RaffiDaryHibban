@@ -1,3 +1,4 @@
+import 'dart:ui'; 
 import 'package:flutter/material.dart';
 import 'package:movie_app/api/api.dart';
 import 'package:movie_app/models/movie.dart';
@@ -6,9 +7,9 @@ class DetailsScreen extends StatefulWidget {
   final Result movie;
 
   const DetailsScreen({
-    Key? key,
+    super.key,
     required this.movie,
-  }) : super(key: key);
+  });
 
   @override
   State<DetailsScreen> createState() => _DetailsScreenState();
@@ -20,16 +21,16 @@ class _DetailsScreenState extends State<DetailsScreen> {
   @override
   void initState() {
     super.initState();
-    // Fetch the genre map once when the screen is initialized
-    _futureGenreMap = Api().getGenreMap();
+    _futureGenreMap = Api().getGenreMap(); 
   }
 
   @override
   Widget build(BuildContext context) {
-    final imageUrl =
-        '${Api.imagePath}${widget.movie.posterPath}';
+    final imageUrl = '${Api.imagePath}${widget.movie.posterPath}';
 
     return Scaffold(
+      backgroundColor: Colors.black,
+      
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -47,7 +48,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
           }
 
           final genreMap = snapshot.data!;
-
+          
           final List<String> genreNames = widget.movie.genreIds
               .map((id) => genreMap[id] ?? 'Unknown')
               .toList();
@@ -55,52 +56,75 @@ class _DetailsScreenState extends State<DetailsScreen> {
           return SingleChildScrollView(
             child: Column(
               children: [
-                Stack(
-                  children: [
-                    SizedBox(
-                      width: double.infinity,
-                      height: 400,
-                      child: Image.network(
-                        imageUrl,
-                        fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) {
-                          return Container(
-                            color: Colors.grey,
-                            child: const Center(child: Icon(Icons.error)),
-                          );
-                        },
+                
+                SizedBox(
+                  height: 400, 
+                  width: double.infinity,
+                  child: Stack(
+                    children: [
+                      
+                      SizedBox(
+                        width: double.infinity,
+                        height: 400,
+                        child: Image.network(
+                          imageUrl,
+                          fit: BoxFit.cover, 
+                          errorBuilder: (context, error, stackTrace) {
+                            return Container(
+                              color: Colors.grey,
+                              child: const Center(child: Icon(Icons.error)),
+                            );
+                          },
+                        ),
                       ),
-                    ),
-
-                    Positioned(
-                      bottom: 0,
-                      left: 0,
-                      right: 0,
-                      height: 150,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.bottomCenter,
-                            end: Alignment.topCenter,
-                            colors: [
-                              Colors.black, 
-                              Colors.black
-                                  .withOpacity(0.0), // fade to transparent
-                            ],
+                      
+                      Positioned.fill(
+                        child: BackdropFilter(
+                          filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+                          child: Container(
+                            color: Colors.black.withOpacity(0.3),
                           ),
                         ),
                       ),
-                    ),
-                  ],
+                      
+                      SizedBox(
+                        width: double.infinity,
+                        height: 400,
+                        child: Image.network(
+                          imageUrl,
+                          fit: BoxFit.contain,
+                        ),
+                      ),
+                      
+                      Positioned(
+                        bottom: 0,
+                        left: 0,
+                        right: 0,
+                        height: 120,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.bottomCenter,
+                              end: Alignment.topCenter,
+                              colors: [
+                                Colors.black,
+                                Colors.black.withOpacity(0.0),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
 
-                // ============= MOVIE INFO SECTION =============
+                
                 Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Title
+                      
                       Text(
                         widget.movie.title,
                         style: const TextStyle(
@@ -111,28 +135,24 @@ class _DetailsScreenState extends State<DetailsScreen> {
                       ),
                       const SizedBox(height: 8),
 
-                      // ============= RATINGS ROW =============
+                      
                       Row(
                         children: [
-                          // IMDB rating
+                          
                           _buildRatingChip(
-                            label:
-                                "IMDB ${widget.movie.voteAverage.toStringAsFixed(1)}",
+                            label: "IMDB ${widget.movie.voteAverage.toStringAsFixed(1)}",
                             color: Colors.yellow[700]!,
                             textColor: Colors.black,
                           ),
                           const SizedBox(width: 8),
-
-                          // Another rating (★)
+                          
                           _buildRatingChip(
-                            label:
-                                "${widget.movie.voteAverage.toStringAsFixed(1)} ★",
+                            label: "${widget.movie.voteAverage.toStringAsFixed(1)} ★",
                             color: Colors.grey[800]!,
                             textColor: Colors.white,
                           ),
                           const SizedBox(width: 8),
-
-                          // Vote count
+                          
                           _buildRatingChip(
                             label: "${widget.movie.voteCount} votes",
                             color: Colors.grey[800]!,
@@ -142,7 +162,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                       ),
                       const SizedBox(height: 16),
 
-                      // ============= GENRE CHIPS (DYNAMIC) =============
+                      
                       Wrap(
                         spacing: 8,
                         runSpacing: 8,
@@ -152,7 +172,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                       ),
                       const SizedBox(height: 16),
 
-                      // ============= OVERVIEW =============
+                      
                       Text(
                         widget.movie.overview,
                         style: const TextStyle(
@@ -172,7 +192,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
     );
   }
 
-  // Helper to build rating chips
+  
   Widget _buildRatingChip({
     required String label,
     required Color color,
@@ -185,7 +205,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
     );
   }
 
-  // Helper to build genre chips
+  
   Widget _buildGenreChip(String genre) {
     return Chip(
       label: Text(genre),
