@@ -14,7 +14,7 @@ class _MainScreenState extends State<MainScreen> {
 
   static const List<Widget> _pages = <Widget>[
     Home(),
-    AboutMe(),
+    AboutMePage(),
   ];
 
   void _onItemTapped(int index) {

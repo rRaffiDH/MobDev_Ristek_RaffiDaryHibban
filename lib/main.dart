@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:hive_flutter/adapters.dart';
+import 'package:movie_app/models/user_profile.dart';
 import 'package:movie_app/pages/main_screen.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
+  await Hive.initFlutter();
+  Hive.registerAdapter(UserProfileAdapter());
+  await Hive.openBox<UserProfile>('profile');
+  
   await dotenv.load(fileName: 'assets/.env');
   
   runApp(const MyApp());
