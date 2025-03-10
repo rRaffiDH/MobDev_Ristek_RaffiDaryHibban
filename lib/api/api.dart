@@ -1,14 +1,19 @@
 import 'dart:convert';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:movie_app/models/movie.dart';
 import 'package:http/http.dart' as http;
 import 'package:movie_app/models/movie_genre.dart';
 
 class Api{
-  static const _apiKey = "7e8344189361242fc3968d4da409b610";
-  static const _nowPlayingUrl = "https://api.themoviedb.org/3/movie/now_playing?api_key=$_apiKey";
-  static const _upcomingUrl = "https://api.themoviedb.org/3/movie/upcoming?api_key=$_apiKey";
-  static const _popularUrl = "https://api.themoviedb.org/3/movie/popular?api_key=$_apiKey";
-  static const _genreUrl = "https://api.themoviedb.org/3/genre/movie/list?api_key=$_apiKey";
+  final String _apiKey = dotenv.env['TMDB_API_KEY'] ?? '';
+  String get _nowPlayingUrl =>
+      "https://api.themoviedb.org/3/movie/now_playing?api_key=$_apiKey";
+  String get _upcomingUrl =>
+      "https://api.themoviedb.org/3/movie/upcoming?api_key=$_apiKey";
+  String get _popularUrl =>
+      "https://api.themoviedb.org/3/movie/popular?api_key=$_apiKey";
+  String get _genreUrl =>
+      "https://api.themoviedb.org/3/genre/movie/list?api_key=$_apiKey";
   static const imagePath = "https://image.tmdb.org/t/p/w500";
   
 
@@ -56,12 +61,11 @@ class Api{
     }
   }
 
-  // 2) Convert that list into a map of id -> name
   Future<Map<int, String>> getGenreMap() async {
-    final genres = await getMovieGenres(); // fetch all genres
+    final genres = await getMovieGenres(); 
     final Map<int, String> genreMap = {};
     for (var g in genres) {
-      genreMap[g.id] = g.name; // build the map
+      genreMap[g.id] = g.name; 
     }
     return genreMap;
   }
